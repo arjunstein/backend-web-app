@@ -18,7 +18,7 @@
                 </button>
 
                 <div
-                    class="collapse navbar-collapse"
+                    class="collapse navbar-collapse justify-content-end"
                     id="navbarSupportedContent"
                 >
                     <!-- Left Side Of Navbar -->
@@ -43,7 +43,7 @@
                     </ul>
 
                     <div
-                        class="collapse navbar-collapse"
+                        class="collapse navbar-collapse justify-content-end"
                         id="navbarNavDarkDropdown"
                         v-if="user.authenticated"
                     >
