@@ -25,7 +25,7 @@
                     <ul class="navbar-nav mr-auto"></ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto" v-if="!user.authenticated">
                         <li class="nav-item">
                             <router-link
                                 :to="{ name: 'login' }"
@@ -42,30 +42,49 @@
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                            <a
-                                id="navbarDropdown"
-                                class="nav-link dropdown-toggle"
-                                href="#"
-                                role="button"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                Arjun
-                                <span class="caret"></span>
-                            </a>
-                            <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="navbarDropdown"
-                            >
-                                <a class="dropdown-item" href="#">Logout</a>
-                            </div>
-                        </li>
-                    </ul>
+                    <div
+                        class="collapse navbar-collapse"
+                        id="navbarNavDarkDropdown"
+                        v-if="user.authenticated"
+                    >
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle"
+                                    href="#"
+                                    id="navbarDarkDropdownMenuLink"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    Arjun
+                                </a>
+                                <ul
+                                    class="dropdown-menu dropdown-menu"
+                                    aria-labelledby="navbarDarkDropdownMenuLink"
+                                >
+                                    <li>
+                                        <a class="dropdown-item" href="#"
+                                            >Logout</a
+                                        >
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
     </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+    computed: {
+        ...mapGetters({
+            user: 'auth/user'
+        })
+    }
+}
+</script>
