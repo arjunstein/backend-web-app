@@ -5096,7 +5096,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     register: 'auth/register'
   })), {}, {
     submit: function submit() {
-      var _this = this;
       this.register({
         payload: {
           name: this.name,
@@ -5104,10 +5103,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           password: this.password
         },
         context: this
-      }).then(function (result) {
-        _this.$router.replace({
-          name: 'home'
-        });
       });
     }
   })
@@ -5630,19 +5625,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   register: () => (/* binding */ register)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-
-
 var register = function register(_ref, _ref2) {
   var dispatch = _ref.dispatch;
-  var payload = _ref2.payload;
-  return axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/auth/register', payload).then(function (result) {
+  var payload = _ref2.payload,
+    context = _ref2.context;
+  return axios.post('/api/auth/register', payload).then(function (result) {
     console.log(result.data);
   })["catch"](function (err) {
-    console.log(err.response.data.errors);
+    context.errors = err.response.data.errors;
   });
 };
 
