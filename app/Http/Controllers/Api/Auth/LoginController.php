@@ -27,7 +27,10 @@ class LoginController extends Controller
 
         if (!Auth::attempt($user)) {
             return response()->json([
-                'message' => 'Authentication is invalid'
+                'message' => 'Authentication is invalid',
+                'errors' =>  [
+                    "root" => "Could not sign in with those details"
+                ]
             ], 422);
         }
 
