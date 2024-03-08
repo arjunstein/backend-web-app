@@ -5805,9 +5805,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   login: () => (/* binding */ login),
-/* harmony export */   register: () => (/* binding */ register)
+/* harmony export */   register: () => (/* binding */ register),
+/* harmony export */   setToken: () => (/* binding */ setToken)
 /* harmony export */ });
-function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure " + obj); }
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../helpers */ "./resources/js/helpers/index.js");
+
 var register = function register(_ref, _ref2) {
   var dispatch = _ref.dispatch;
   var payload = _ref2.payload,
@@ -5819,14 +5821,21 @@ var register = function register(_ref, _ref2) {
   });
 };
 var login = function login(_ref3, _ref4) {
-  _objectDestructuringEmpty(_ref3);
+  var dispatch = _ref3.dispatch;
   var payload = _ref4.payload,
     context = _ref4.context;
   return axios.post('/api/auth/login', payload).then(function (result) {
-    console.log(result.data);
+    dispatch('setToken', result.data.meta.token).then(function () {
+      console.log(result.data.meta.token);
+    });
   })["catch"](function (err) {
     context.errors = err.response.data.errors;
   });
+};
+var setToken = function setToken(_ref5, token) {
+  var commit = _ref5.commit;
+  commit('setToken', token);
+  (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.setHttpToken)(token);
 };
 
 /***/ }),
@@ -5861,7 +5870,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state */ "./resources/js/app/auth/store/state.js");
 /* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mutations */ "./resources/js/app/auth/store/mutations.js");
-/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_mutations__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./actions */ "./resources/js/app/auth/store/actions.js");
 /* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./getters */ "./resources/js/app/auth/store/getters.js");
 
@@ -5882,9 +5890,23 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************!*\
   !*** ./resources/js/app/auth/store/mutations.js ***!
   \**************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   setToken: () => (/* binding */ setToken)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 
+var setToken = function setToken(state, token) {
+  if ((0,lodash__WEBPACK_IMPORTED_MODULE_0__.isEmpty)(token)) {
+    localStorage.removeItem('access_token');
+    return;
+  }
+  localStorage.setItem('access_token', token);
+};
 
 /***/ }),
 
@@ -5986,6 +6008,29 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/helpers/index.js":
+/*!***************************************!*\
+  !*** ./resources/js/helpers/index.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   setHttpToken: () => (/* binding */ setHttpToken)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+var setHttpToken = function setHttpToken(token) {
+  if ((0,lodash__WEBPACK_IMPORTED_MODULE_0__.isEmpty)(token)) {
+    window.axios.defaults.headers.common['Authorization'] = '';
+  }
+  window.axios.defaults.headers.common['Authorization'] = +'Bearer ' + token;
+};
 
 /***/ }),
 
