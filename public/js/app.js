@@ -5095,12 +5095,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     login: 'auth/login'
   })), {}, {
     submit: function submit() {
+      var _this = this;
       this.login({
         payload: {
           email: this.email,
           password: this.password
         },
         context: this
+      }).then(function (result) {
+        _this.$router.replace({
+          name: 'home'
+        });
       });
     }
   })
@@ -5804,6 +5809,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fetchUser: () => (/* binding */ fetchUser),
 /* harmony export */   login: () => (/* binding */ login),
 /* harmony export */   register: () => (/* binding */ register),
 /* harmony export */   setToken: () => (/* binding */ setToken)
@@ -5815,7 +5821,9 @@ var register = function register(_ref, _ref2) {
   var payload = _ref2.payload,
     context = _ref2.context;
   return axios.post('/api/auth/register', payload).then(function (result) {
-    console.log(result.data);
+    dispatch('setToken', result.data.meta.token).then(function () {
+      dispatch('fetchUser', result.data.data);
+    });
   })["catch"](function (err) {
     context.errors = err.response.data.errors;
   });
@@ -5826,7 +5834,7 @@ var login = function login(_ref3, _ref4) {
     context = _ref4.context;
   return axios.post('/api/auth/login', payload).then(function (result) {
     dispatch('setToken', result.data.meta.token).then(function () {
-      console.log(result.data.meta.token);
+      dispatch('fetchUser', result.data.data);
     });
   })["catch"](function (err) {
     context.errors = err.response.data.errors;
@@ -5836,6 +5844,11 @@ var setToken = function setToken(_ref5, token) {
   var commit = _ref5.commit;
   commit('setToken', token);
   (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.setHttpToken)(token);
+};
+var fetchUser = function fetchUser(_ref6, user) {
+  var commit = _ref6.commit;
+  commit('setAuthenticated', true);
+  commit('setUserData', user);
 };
 
 /***/ }),
@@ -5895,10 +5908,14 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   setToken: () => (/* binding */ setToken)
+/* harmony export */   setAuthenticated: () => (/* binding */ setAuthenticated),
+/* harmony export */   setToken: () => (/* binding */ setToken),
+/* harmony export */   setUserData: () => (/* binding */ setUserData)
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./state */ "./resources/js/app/auth/store/state.js");
+
 
 var setToken = function setToken(state, token) {
   if ((0,lodash__WEBPACK_IMPORTED_MODULE_0__.isEmpty)(token)) {
@@ -5906,6 +5923,12 @@ var setToken = function setToken(state, token) {
     return;
   }
   localStorage.setItem('access_token', token);
+};
+var setAuthenticated = function setAuthenticated(state, trueOrFalse) {
+  state.user.authenticated = trueOrFalse;
+};
+var setUserData = function setUserData(state, data) {
+  state.user.data = data;
 };
 
 /***/ }),
