@@ -57,7 +57,7 @@
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    Arjun
+                                    arjuna
                                 </a>
                                 <ul
                                     class="dropdown-menu dropdown-menu"
@@ -80,6 +80,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { user } from '../app/auth/store/getters'
 export default {
     computed: {
         ...mapGetters({
