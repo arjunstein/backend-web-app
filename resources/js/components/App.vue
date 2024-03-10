@@ -13,6 +13,9 @@ import Navigation from './Navigation'
 export default {
     components: {
         Navigation
+    },
+    mounted () {
+        console.log('Component mounted')
     }
 }
 </script>
