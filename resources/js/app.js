@@ -11,12 +11,17 @@ require('./bootstrap')
 
 window.Vue = require('vue').default
 
-store.dispatch('auth/setToken').then(() => {
-    store.dispatch('auth/fetchUser').catch(() => {
-        store.dispatch('auth/removeToken')
-        router.replace({ name: 'login' })
+store
+    .dispatch('auth/setToken')
+    .then(() => {
+        store.dispatch('auth/fetchUser').catch(() => {
+            store.dispatch('auth/removeToken')
+            router.replace({ name: 'login' })
+        })
     })
-})
+    .catch(() => {
+        store.dispatch('auth/removeToken')
+    })
 
 /**
  * The following block of code may be used to automatically register your

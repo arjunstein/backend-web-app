@@ -107,6 +107,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { isEmpty } from 'lodash'
+
 export default {
     data () {
         return {
@@ -126,9 +128,18 @@ export default {
                     password: this.password
                 },
                 context: this
-            }).then(result => {
-                this.$router.replace({ name: 'home' })
             })
+                .then(result => {
+                    const routeName = localStorage.getItem('intended')
+                    if (isEmpty(routeName)) {
+                        this.$router.replace({ name: 'home' })
+                        return
+                    }
+                    this.$router.replace({ name: routeName })
+                })
+                .catch(() => {
+                    console.log('error')
+                })
         }
     }
 }
