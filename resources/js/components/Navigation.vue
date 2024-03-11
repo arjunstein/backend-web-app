@@ -41,37 +41,31 @@
                             >
                         </li>
                     </ul>
-
-                    <div
-                        class="collapse navbar-collapse justify-content-end"
-                        id="navbarNavDarkDropdown"
-                        v-if="user.authenticated"
-                    >
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a
-                                    class="nav-link dropdown-toggle"
-                                    href="#"
-                                    id="navbarDarkDropdownMenuLink"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    arjuna
-                                </a>
-                                <ul
-                                    class="dropdown-menu dropdown-menu"
-                                    aria-labelledby="navbarDarkDropdownMenuLink"
-                                >
-                                    <li>
-                                        <a class="dropdown-item" href="#"
-                                            >Logout</a
-                                        >
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="navbar-nav ml-auto" v-if="user.authenticated">
+                        <li class="nav-item">
+                            <router-link
+                                :to="{ name: 'profile' }"
+                                class="nav-link"
+                                >Profile</router-link
+                            >
+                        </li>
+                        <li class="nav-item dropdown">
+                            <router-link
+                                class="nav-link dropdown-toggle"
+                                :to="{ name: 'profile' }"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                {{ user.data.name }}
+                            </router-link>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="#">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
