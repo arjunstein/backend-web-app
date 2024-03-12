@@ -61,7 +61,12 @@
                             </router-link>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item" href="#">Logout</a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="#"
+                                        @click.prevent="signOut"
+                                        >Logout</a
+                                    >
                                 </li>
                             </ul>
                         </li>
@@ -73,13 +78,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { user } from '../app/auth/store/getters'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     computed: {
         ...mapGetters({
             user: 'auth/user'
         })
+    },
+    methods: {
+        ...mapActions({
+            logout: 'auth/logout'
+        }),
+        signOut () {
+            this.logout().then(() => {
+                this.$router.replace({ name: 'home' })
+            })
+        }
     }
 }
 </script>
