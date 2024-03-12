@@ -5206,8 +5206,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _app_auth_store_getters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app/auth/store/getters */ "./resources/js/app/auth/store/getters.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -5215,11 +5214,22 @@ function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key i
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)({
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)({
     user: 'auth/user'
-  }))
+  })),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)({
+    logout: 'auth/logout'
+  })), {}, {
+    signOut: function signOut() {
+      var _this = this;
+      this.logout().then(function () {
+        _this.$router.replace({
+          name: 'home'
+        });
+      });
+    }
+  })
 });
 
 /***/ }),
@@ -5730,7 +5740,20 @@ var render = function render() {
       "data-bs-toggle": "dropdown",
       "aria-expanded": "false"
     }
-  }, [_vm._v("\n                            " + _vm._s(_vm.user.data.name) + "\n                        ")]), _vm._v(" "), _vm._m(1)], 1)]) : _vm._e()])], 1)])]);
+  }, [_vm._v("\n                            " + _vm._s(_vm.user.data.name) + "\n                        ")]), _vm._v(" "), _c("ul", {
+    staticClass: "dropdown-menu"
+  }, [_c("li", [_c("a", {
+    staticClass: "dropdown-item",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.signOut.apply(null, arguments);
+      }
+    }
+  }, [_vm._v("Logout")])])])], 1)]) : _vm._e()])], 1)])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -5748,17 +5771,6 @@ var staticRenderFns = [function () {
   }, [_c("span", {
     staticClass: "navbar-toggler-icon"
   })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("ul", {
-    staticClass: "dropdown-menu"
-  }, [_c("li", [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_vm._v("Logout")])])]);
 }];
 render._withStripped = true;
 
@@ -5890,6 +5902,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   checkTokenExists: () => (/* binding */ checkTokenExists),
 /* harmony export */   fetchUser: () => (/* binding */ fetchUser),
 /* harmony export */   login: () => (/* binding */ login),
+/* harmony export */   logout: () => (/* binding */ logout),
 /* harmony export */   register: () => (/* binding */ register),
 /* harmony export */   removeToken: () => (/* binding */ removeToken),
 /* harmony export */   setToken: () => (/* binding */ setToken)
@@ -5926,9 +5939,15 @@ var login = function login(_ref3, _ref4) {
     context.errors = err.response.data.errors;
   });
 };
-var setToken = function setToken(_ref5, token) {
-  var commit = _ref5.commit,
-    dispatch = _ref5.dispatch;
+var logout = function logout(_ref5) {
+  var dispatch = _ref5.dispatch;
+  axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/auth/logout').then(function () {
+    dispatch('removeToken');
+  });
+};
+var setToken = function setToken(_ref6, token) {
+  var commit = _ref6.commit,
+    dispatch = _ref6.dispatch;
   if ((0,lodash__WEBPACK_IMPORTED_MODULE_2__.isEmpty)(token)) {
     return dispatch('checkTokenExists').then(function (token) {
       (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.setHttpToken)(token);
@@ -5937,15 +5956,15 @@ var setToken = function setToken(_ref5, token) {
   commit('setToken', token);
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.setHttpToken)(token);
 };
-var removeToken = function removeToken(_ref6) {
-  var commit = _ref6.commit;
+var removeToken = function removeToken(_ref7) {
+  var commit = _ref7.commit;
   commit('setAuthenticated', false);
   commit('setUserData', null);
   commit('setToken', null);
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.setHttpToken)(null);
 };
-var fetchUser = function fetchUser(_ref7) {
-  var commit = _ref7.commit;
+var fetchUser = function fetchUser(_ref8) {
+  var commit = _ref8.commit;
   axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/user').then(function (result) {
     commit('setAuthenticated', true);
     commit('setUserData', result.data);
