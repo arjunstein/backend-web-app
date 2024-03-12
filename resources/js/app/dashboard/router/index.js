@@ -7,7 +7,7 @@ export default [
         name: 'profile',
         meta: {
             guest: false,
-            authenticate: true
+            authenticated: true
         }
     }
 ]
